@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Veylo — Personal Cloud Storage</title>
+
+    <meta
+        name="description"
+        content="Veylo — simple, secure personal cloud storage."
+    >
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- ================= SIDEBAR ================= -->
+
+    <aside class="sidebar">
+
+        <div class="brand">
+            <div class="brand-logo">V</div>
+            <span>veylo</span>
+        </div>
+
+        <button id="uploadBtn" class="upload-btn">
+            <span>+</span>
+            Upload
+        </button>
+
+        <nav class="sidebar-nav">
+
+            <a href="#" class="nav-item active">
+                <span class="nav-icon">⌂</span>
+                <span>My Drive</span>
+            </a>
+
+            <a href="#" class="nav-item">
+                <span class="nav-icon">☆</span>
+                <span>Starred</span>
+            </a>
+
+            <a href="#" class="nav-item">
+                <span class="nav-icon">◷</span>
+                <span>Recent</span>
+            </a>
+
+            <a href="#" class="nav-item">
+                <span class="nav-icon">⇄</span>
+                <span>Shared</span>
+            </a>
+
+            <a href="#" class="nav-item">
+                <span class="nav-icon">⌫</span>
+                <span>Trash</span>
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <div class="storage-title">
+                <span>Storage</span>
+                <span id="storageText">0 GB / 15 GB</span>
+            </div>
+
+            <div class="storage-bar">
+                <div class="storage-progress" id="storageProgress"></div>
+            </div>
+
+            <button class="upgrade-btn">
+                Manage storage
+            </button>
+
+        </div>
+
+    </aside>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main class="main">
+
+        <!-- TOPBAR -->
+
+        <header class="topbar">
+
+            <div class="search-wrapper">
+                <span class="search-icon">⌕</span>
+
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Search files and folders..."
+                    autocomplete="off"
+                >
+            </div>
+
+            <div class="topbar-right">
+
+                <button class="icon-btn" title="Notifications">
+                    ♢
+                </button>
+
+                <button class="icon-btn" title="Settings">
+                    ⚙
+                </button>
+
+                <div id="profileArea" class="profile-area">
+
+                    <!-- Logged-out state -->
+
+                    <button id="loginBtn" class="login-btn">
+                        Login
+                    </button>
+
+                    <!-- Logged-in state -->
+
+                    <div id="userProfile" class="user-profile hidden">
+
+                        <img
+                            id="userAvatar"
+                            src=""
+                            alt="Profile"
+                        >
+
+                        <div class="user-info">
+                            <strong id="userName">User</strong>
+                            <span id="userEmail">user@example.com</span>
+                        </div>
+
+                        <button id="logoutBtn" class="logout-btn">
+                            Logout
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- ================= CONTENT ================= -->
+
+        <section class="content">
+
+            <!-- WELCOME -->
+
+            <div class="welcome-section">
+
+                <div>
+                    <p class="eyebrow">MY DRIVE</p>
+
+                    <h1>
+                        Your files,
+                        <span>your space.</span>
+                    </h1>
+
+                    <p class="welcome-text">
+                        Store, organize and access your files securely.
+                    </p>
+                </div>
+
+                <button id="emptyUploadBtn" class="primary-btn">
+                    + Upload files
+                </button>
+
+            </div>
+
+
+            <!-- QUICK CARDS -->
+
+            <div class="quick-grid">
+
+                <div class="quick-card">
+
+                    <div class="quick-icon">
+                        +
+                    </div>
+
+                    <div>
+                        <strong>Upload files</strong>
+                        <p>Add files to your Veylo drive.</p>
+                    </div>
+
+                </div>
+
+
+                <div class="quick-card">
+
+                    <div class="quick-icon folder-icon">
+                        □
+                    </div>
+
+                    <div>
+                        <strong>Create folder</strong>
+                        <p>Keep your files organized.</p>
+                    </div>
+
+                </div>
+
+
+                <div class="quick-card">
+
+                    <div class="quick-icon">
+                        ✓
+                    </div>
+
+                    <div>
+                        <strong>Secure storage</strong>
+                        <p>Your files stay in your cloud.</p>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- FOLDERS -->
+
+            <section class="section">
+
+                <div class="section-header">
+
+                    <div>
+                        <h2>Folders</h2>
+                        <p>Your folders</p>
+                    </div>
+
+                    <button class="section-action">
+                        View all
+                    </button>
+
+                </div>
+
+                <div id="folderGrid" class="folder-grid">
+
+                    <div class="empty-state small-empty">
+
+                        <div class="empty-icon">
+                            □
+                        </div>
+
+                        <p>No folders yet</p>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- RECENT FILES -->
+
+            <section class="section">
+
+                <div class="section-header">
+
+                    <div>
+                        <h2>Recent files</h2>
+                        <p>Your latest uploads</p>
+                    </div>
+
+                    <span id="fileCount" class="file-count">
+                        0 files
+                    </span>
+
+                </div>
+
+
+                <div class="file-table">
+
+                    <div class="file-table-header">
+
+                        <span>Name</span>
+                        <span>Modified</span>
+                        <span>Size</span>
+                        <span></span>
+
+                    </div>
+
+
+                    <div id="fileList">
+
+                        <div class="empty-state">
+
+                            <div class="empty-icon">
+                                ↑
+                            </div>
+
+                            <h3>No files yet</h3>
+
+                            <p>
+                                Upload your first file to get started.
+                            </p>
+
+                            <button
+                                id="emptyUploadBtn2"
+                                class="primary-btn"
+                            >
+                                Upload files
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </section>
+
+    </main>
+
+
+    <!-- ================= LOGIN MODAL ================= -->
+
+    <div id="loginModal" class="modal hidden">
+
+        <div class="modal-overlay"></div>
+
+        <div class="modal-box auth-modal">
+
+            <button
+                id="closeLoginModal"
+                class="modal-close"
+                aria-label="Close"
+            >
+                ×
+            </button>
+
+            <div class="auth-header">
+
+                <div class="auth-logo">
+                    V
+                </div>
+
+                <h2>Welcome to Veylo</h2>
+
+                <p>
+                    Sign in to access your cloud storage.
+                </p>
+
+            </div>
+
+
+            <form id="loginForm">
+
+                <div class="input-group">
+
+                    <label for="loginEmail">
+                        Email
+                    </label>
+
+                    <input
+                        type="email"
+                        id="loginEmail"
+                        placeholder="you@example.com"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="input-group">
+
+                    <label for="loginPassword">
+                        Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="loginPassword"
+                        placeholder="Enter your password"
+                        required
+                    >
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="auth-submit"
+                >
+                    Sign in
+                </button>
+
+            </form>
+
+
+            <div class="auth-divider">
+                <span>OR</span>
+            </div>
+
+
+            <button
+                id="googleLoginBtn"
+                class="google-login-btn"
+                type="button"
+            >
+
+                <span class="google-icon">
+                    G
+                </span>
+
+                Continue with Google
+
+            </button>
+
+
+            <p id="loginMessage" class="auth-message"></p>
+
+
+            <div class="auth-footer">
+
+                <span>Don't have an account?</span>
+
+                <button
+                    id="showRegisterBtn"
+                    type="button"
+                >
+                    Create New
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= REGISTER MODAL ================= -->
+
+    <div id="registerModal" class="modal hidden">
+
+        <div class="modal-overlay"></div>
+
+        <div class="modal-box auth-modal">
+
+            <button
+                id="closeRegisterModal"
+                class="modal-close"
+                aria-label="Close"
+            >
+                ×
+            </button>
+
+            <div class="auth-header">
+
+                <div class="auth-logo">
+                    V
+                </div>
+
+                <h2>Create your account</h2>
+
+                <p>
+                    Start using Veylo today.
+                </p>
+
+            </div>
+
+
+            <form id="registerForm">
+
+                <div class="input-group">
+
+                    <label for="registerName">
+                        Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="registerName"
+                        placeholder="Your name"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="input-group">
+
+                    <label for="registerEmail">
+                        Email
+                    </label>
+
+                    <input
+                        type="email"
+                        id="registerEmail"
+                        placeholder="you@example.com"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="input-group">
+
+                    <label for="registerPassword">
+                        Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="registerPassword"
+                        placeholder="At least 6 characters"
+                        minlength="6"
+                        required
+                    >
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="auth-submit"
+                >
+                    Create account
+                </button>
+
+            </form>
+
+
+            <p id="registerMessage" class="auth-message"></p>
+
+
+            <div class="auth-footer">
+
+                <span>Already have an account?</span>
+
+                <button
+                    id="showLoginBtn"
+                    type="button"
+                >
+                    Sign in
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= UPLOAD MODAL ================= -->
+
+    <div id="uploadModal" class="modal hidden">
+
+        <div class="modal-overlay"></div>
+
+        <div class="modal-box upload-modal">
+
+            <div class="modal-header">
+
+                <div>
+                    <h2>Upload files</h2>
+
+                    <p>
+                        Add files to your Veylo drive.
+                    </p>
+                </div>
+
+                <button
+                    id="closeModal"
+                    class="modal-close"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <div
+                id="dropZone"
+                class="drop-zone"
+            >
+
+                <div class="drop-icon">
+                    ↑
+                </div>
+
+                <h3>
+                    Drop files here
+                </h3>
+
+                <p>
+                    or choose files from your device
+                </p>
+
+                <button
+                    id="chooseFiles"
+                    class="primary-btn"
+                    type="button"
+                >
+                    Choose files
+                </button>
+
+                <input
+                    type="file"
+                    id="fileInput"
+                    multiple
+                    hidden
+                >
+
+            </div>
+
+
+            <div
+                id="uploadList"
+                class="upload-list"
+            ></div>
+
+
+            <div class="upload-footer">
+
+                <button
+                    id="cancelUpload"
+                    class="secondary-btn"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    id="startUpload"
+                    class="primary-btn"
+                >
+                    Upload
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script src="script.js"></script>
+
+</body>
+</html>
